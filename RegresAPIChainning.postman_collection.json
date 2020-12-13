@@ -1,0 +1,255 @@
+{
+	"info": {
+		"_postman_id": "40fd3a8b-d670-4dce-8c47-926a4ce2eeca",
+		"name": "Regres API Chainning",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c81d7606-6440-4057-8744-db576b9ef40d",
+						"exec": [
+							"payload= JSON.parse(responseBody);",
+							"var nameValue= payload.name;",
+							"var lastnameValue= payload.lastname;",
+							"var idValue= payload.id;",
+							"",
+							"console.log(\"nameValue : \"+nameValue);",
+							"console.log(\"lastnameValue : \" +lastnameValue);",
+							"console.log(\"idValue : \" + idValue);",
+							"",
+							"pm.environment.set(\"name\", nameValue);",
+							"pm.environment.set(\"lastname\", lastnameValue);",
+							"pm.environment.set(\"job\", payload.job);",
+							"",
+							"postman.setNextRequest(\"GetUserList\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "456ed435-732d-45ee-b32c-7b6772a84528",
+						"exec": [
+							"console.log(\"Before API Call id : \"+ pm.environment.get(\"id\"))",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Elif Zeynep\",\n    \"lastname\":\"Dolapci\",\n    \"job\": \"kid\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "faa8031c-870d-4796-978c-d78919f5166a",
+						"exec": [
+							"payload= JSON.parse(responseBody);",
+							"",
+							"",
+							"",
+							"postman.setNextRequest(null);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d51426f6-0cb5-44f0-b4e0-1a753617a7db",
+						"exec": [
+							"",
+							"pm.environment.set(\"name\", \"Holy\");",
+							"pm.environment.set(\"lastname\", \"Moly\");",
+							"pm.environment.set(\"id\", 3);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{name}}\",\n    \"lastname\":\"{{lastname}}\",\n    \"id\": \"{{id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/{{id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserList",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a20eaeb3-e589-4409-a27f-f143915e8738",
+						"exec": [
+							"payload= JSON.parse(responseBody);",
+							"",
+							"var firstname= payload.data[0].first_name;",
+							"var lastname= payload.data[0].last_name;",
+							"var idValue= payload.data[0].id;",
+							"",
+							"console.log(firstname)",
+							"console.log(lastname)",
+							"",
+							"pm.environment.set(\"id\", idValue);",
+							"",
+							"postman.setNextRequest(\"UpdateUser\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/users?page={{page}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "{{page}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSingleUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d260a147-78dd-4e60-9bf4-73a52dfa221d",
+						"exec": [
+							"postman.setNextRequest(\"UpdateUser\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/users/{{id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Covid19countries",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.covid19api.com/countries",
+					"protocol": "https",
+					"host": [
+						"api",
+						"covid19api",
+						"com"
+					],
+					"path": [
+						"countries"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6c2a1b57-ed5a-46ec-930b-cb2ee249ac29",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "2d9bbe66-c987-41a5-a7f5-04e3415a881f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "342285ab-fad2-4561-a3df-d8551a559eda",
+			"key": "page",
+			"value": "1"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
